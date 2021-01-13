@@ -22,31 +22,30 @@ const Display = ( {header, anecdote, vote} ) => {
 const App = (props) => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(Array.apply(null, new Array(anecdotes.length)).map(Number.prototype.valueOf,0))
+  const [mostVotes, setMostVotes] = useState(0)
 
   const handleVote  = () => {
     const updateVote = [...votes]
     updateVote[selected] += 1
-    return setVotes(updateVote)
+    setVotes(updateVote)
+    if (updateVote[selected] > updateVote[mostVotes])
+        setMostVotes(selected)
   }
 
   const handleNextAnecdote  = () => {
-    const randomNumber = Math.floor(Math.random() * anecdotes.length)
-    return setSelected(randomNumber)
+    let randomNumber = Math.floor(Math.random() * anecdotes.length)
+    while (randomNumber === selected)
+        randomNumber = Math.floor(Math.random() * anecdotes.length)
+    setSelected(randomNumber)
   }
 
-  const getIndexMaxVote = () => {
-      let index = votes.indexOf(Math.max(...votes))
-      return index
-  }
-  console.log(votes)
 
   return (
     <div>
         <Display header="Anecdote of the day" anecdote={anecdotes[selected]} vote={votes[selected]} />
         <Button handleClick={handleVote} text="vote" />
         <Button handleClick={handleNextAnecdote} text="next anecdote" />
-        <p>{props.anecdotes[getIndexMaxVote()]}</p>
-        <Display header="Anecdote with most votes" anecdote={anecdotes[getIndexMaxVote()]} vote={votes[getIndexMaxVote()]} />
+        <Display header="Anecdote with most votes" anecdote={anecdotes[mostVotes]} vote={votes[mostVotes]} />
     </div>
   )
 }

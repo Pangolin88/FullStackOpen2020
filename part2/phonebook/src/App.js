@@ -20,8 +20,9 @@ const App = () => {
   }, [])
 
   const addPerson = (event) => {
-      event.preventDefault()
-      const personObject = {
+      const filterPerson = persons.filter(person => person.name === newName)
+      if (filterPerson.length === 0){
+          const personObject = {
               name: newName,
               number: newNumber
           }
@@ -37,53 +38,34 @@ const App = () => {
           setTimeout(() => setNotification({
               message: null,
               isSuccess: false
-          }), 5000)
-      // const filterPerson = persons.filter(person => person.name === newName)
-      // if (filterPerson.length === 0){
-      //     const personObject = {
-      //         name: newName,
-      //         number: newNumber
-      //     }
-      //     personService
-      //         .create(personObject)
-      //         .then(personObject => {
-      //             setPersons(persons.concat(personObject))
-      //             setNotification({
-      //                 message: `Added ${newName}`,
-      //                 isSuccess: true})
-      //             }
-      //         )
-      //     setTimeout(() => setNotification({
-      //         message: null,
-      //         isSuccess: false
-      //     }), 5000)
-      // }
-      // else
-      //     if(window.confirm(`${newName} is already added to phonebook, replace a old number with a new one?`)) {
-      //         const changedPerson = {...filterPerson[0], number: newNumber}
-      //         console.log('changedPerson', changedPerson)
-      //         personService
-      //             .update(changedPerson.id, changedPerson)
-      //             .then(returnedPerson => {
-      //                 setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
-      //                 setNotification({
-      //                     message: `Updated ${newName}`,
-      //                     isSuccess: true
-      //                 })
-      //             })
-      //             .catch(error => {
-      //                 setNotification({
-      //                     message: `Information of ${newName} has already been removed from server`,
-      //                     isSuccess: false
-      //                 })
-      //                 setPersons(persons.filter(person => person.name !== newName))
-      //                 console.log(error)
-      //             })
-      //         setTimeout(() => setNotification({
-      //             message: null,
-      //             isSuccess: false
-      //         }), 5000)
-      //     }
+          }), 2000)
+      }
+      else
+          if(window.confirm(`${newName} is already added to phonebook, replace a old number with a new one?`)) {
+              const changedPerson = {...filterPerson[0], number: newNumber}
+              console.log('changedPerson', changedPerson)
+              personService
+                  .update(changedPerson.id, changedPerson)
+                  .then(returnedPerson => {
+                      setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
+                      setNotification({
+                          message: `Updated ${newName}`,
+                          isSuccess: true
+                      })
+                  })
+                  .catch(error => {
+                      setNotification({
+                          message: `Information of ${newName} has already been removed from server`,
+                          isSuccess: false
+                      })
+                      setPersons(persons.filter(person => person.name !== newName))
+                      console.log(error)
+                  })
+              setTimeout(() => setNotification({
+                  message: null,
+                  isSuccess: false
+              }), 2000)
+          }
       setNewName('')
       setNewPhone('')
     }

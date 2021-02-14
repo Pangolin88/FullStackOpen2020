@@ -4,6 +4,13 @@ const User = require('../models/user')
 
 usersRouter.post('/', async (request, response) => {
   const body = request.body
+
+  if (!body.username || !body.password)
+    return response.status(400).json({error: 'username or password is missing'})
+
+  if (body.password.length < 3)
+    return response.status(400).json({error: 'password should has more than 3 characters'})
+
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(body.password, saltRounds)
   const user = new User({

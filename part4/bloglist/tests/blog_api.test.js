@@ -24,7 +24,7 @@ describe('when there is initially some blogs saved', () => {
             .expect('Content-Type', /application\/json/)
     })
 
-    test('there are six blogs', async () => {
+    test('there is number of blogs', async () => {
         const response = await api.get('/api/blogs')
         expect(response.body).toHaveLength(helper.initialBlogs.length)
     })

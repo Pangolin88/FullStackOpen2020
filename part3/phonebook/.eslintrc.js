@@ -27,5 +27,10 @@ module.exports = {
             'never'
         ],
         'eqeqeq': 'error',
+        'no-trailing-spaces': 'error',
+        'arrow-spacing': [
+            'error', { 'before': true, 'after': true }
+        ],
+        'no-console': 0
     }
 }

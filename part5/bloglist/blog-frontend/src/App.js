@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import loginService from './services/login'
 import blogService from './services/blogs'
@@ -6,16 +6,16 @@ import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import LogoutButton from './components/LogoutButton'
+import Toggleable from './components/Toggleable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [status, setStatus] = useState({message: null, isSuccess: false})
+
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -38,18 +38,6 @@ const App = () => {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value)
-  }
-
-  const handleTitledChange = (event) => {
-    setTitle(event.target.value)
-  }
-
-  const handleAuthorChange = (event) => {
-    setAuthor(event.target.value)
-  }
-
-  const handleUrlChange = (event) => {
-    setUrl(event.target.value)
   }
 
   const handleStatus = (message, isSuccess) => {
@@ -91,29 +79,20 @@ const App = () => {
     handleStatus('logout successfully', true)
   }
 
-  const handleNewBlog = async (event) => {
-    event.preventDefault()
-    console.log(title, author, url)
-    const newBlog = {
-      title: title,
-      author: author,
-      url: url
-    }
+  const handleNewBlog = async (newBlog) => {
     try{
-      const returnedBlog = await blogService.create(newBlog)
-      console.log(returnedBlog)
-      setBlogs(blogs.concat(returnedBlog))
-      if (author)
-        handleStatus(`a new blog ${returnedBlog.title} by ${returnedBlog.author}`, true)
-      else
-        handleStatus(`a new blog ${returnedBlog.title}`, true)
-    }catch (exception) {
-      if (!title || !url)
-        handleStatus('missing title or url', false)
-    }
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+          const returnedBlog = await blogService.create(newBlog)
+          console.log(returnedBlog)
+          setBlogs(blogs.concat(returnedBlog))
+          if (newBlog.author)
+            handleStatus(`a new blog ${returnedBlog.title} by ${returnedBlog.author}`, true)
+          else
+            handleStatus(`a new blog ${returnedBlog.title}`, true)
+          blogFormRef.current.toggleVisibility()
+        }catch (exception) {
+          if (!newBlog.title || !newBlog.url)
+            handleStatus('missing title or url', false)
+        }
   }
 
   const checkLogin = (user) => {
@@ -129,13 +108,9 @@ const App = () => {
       return(
           <div>
             <LogoutButton handleLogout={handleLogout} user={user}/>
-            <BlogForm handleNewBlog={handleNewBlog}
-                  handleTitleChange={handleTitledChange}
-                  handleAuthorChange={handleAuthorChange}
-                  handleUrlChange={handleUrlChange}
-                  title={title}
-                  author={author}
-                  url={url}/>
+            <Toggleable buttonLabel='create new blog' ref={blogFormRef}>
+              <BlogForm handleNewBlog={handleNewBlog}/>
+             </Toggleable>
           </div>
       )
   }

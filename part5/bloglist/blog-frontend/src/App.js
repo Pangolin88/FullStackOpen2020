@@ -78,7 +78,7 @@ const App = () => {
         }catch (exception) {
           if (!newBlog.title || !newBlog.url)
             handleStatus('missing title or url', false)
-        }
+    }
   }
 
   const checkLogin = (user) => {
@@ -101,13 +101,21 @@ const App = () => {
       )
   }
 
+  const handleUpdateBlog = async (updateBlog) => {
+      try{
+          const returnedBlog = await blogService.update(updateBlog.id, updateBlog)
+          console.log(returnedBlog)
+        }catch (exception) {
+    }
+  }
+
   return (
     <div>
       <Notification message={status.message} isSuccess={status.isSuccess}/>
       <h2>blogs</h2>
       {checkLogin(user)}
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} handleUpdateBlog={handleUpdateBlog}/>
       )}
     </div>
   )

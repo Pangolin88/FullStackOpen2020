@@ -1,6 +1,4 @@
 import React, {useState} from "react";
-import loginService from "../services/login";
-import blogService from "../services/blogs";
 
 const LoginForm = ({ handleLogin }) => {
     const [username, setUsername] = useState('')

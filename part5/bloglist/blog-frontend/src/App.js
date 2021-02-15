@@ -13,11 +13,15 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [status, setStatus] = useState({message: null, isSuccess: false})
 
+
   const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs.sort( (a, b) => {
+          return b.likes - a.likes
+        })
+      )
     )
   }, [])
 
@@ -70,6 +74,9 @@ const App = () => {
           const returnedBlog = await blogService.create(newBlog)
           console.log(returnedBlog)
           setBlogs(blogs.concat(returnedBlog))
+              .sort( (a, b) => {
+                  return b.likes - a.likes
+                })
           if (newBlog.author)
             handleStatus(`a new blog ${returnedBlog.title} by ${returnedBlog.author}`, true)
           else
@@ -105,6 +112,11 @@ const App = () => {
       try{
           const returnedBlog = await blogService.update(updateBlog.id, updateBlog)
           console.log(returnedBlog)
+          blogService.getAll().then(blogs =>
+          setBlogs(blogs.sort( (a, b) => {
+              return b.likes - a.likes
+            })
+          ))
         }catch (exception) {
     }
   }

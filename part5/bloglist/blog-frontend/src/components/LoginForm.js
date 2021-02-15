@@ -1,8 +1,28 @@
-import React from "react";
+import React, {useState} from "react";
+import loginService from "../services/login";
+import blogService from "../services/blogs";
 
-const LoginForm = ({ handleLogin, handleUsernameChange, handlePasswordChange, username, password }) => {
+const LoginForm = ({ handleLogin }) => {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value)
+      }
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value)
+      }
+
+    const login = async (event) => {
+        event.preventDefault()
+        console.log('logging in with', username, password)
+        handleLogin(username, password)
+        setUsername('')
+        setPassword('')
+      }
+
     return(
-        <form onSubmit={handleLogin}>
+        <form onSubmit={login}>
         <div>
           username
             <input

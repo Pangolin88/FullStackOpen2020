@@ -10,8 +10,6 @@ import Toggleable from './components/Toggleable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [status, setStatus] = useState({message: null, isSuccess: false})
 
@@ -32,14 +30,6 @@ const App = () => {
     }
   }, [])
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value)
-  }
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value)
-  }
-
   const handleStatus = (message, isSuccess) => {
     setStatus({
           message: message,
@@ -53,20 +43,16 @@ const App = () => {
         }, 3000)
   }
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    console.log('logging in with', username, password)
+  const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({
-        username, password,
+        username, password
       })
       window.localStorage.setItem(
           'loggedNoteappUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
       handleStatus('login successfully', true)
     } catch (exception) {
       handleStatus('invalid username or password', false)
@@ -98,11 +84,11 @@ const App = () => {
   const checkLogin = (user) => {
     if (user === null)
       return(
-          <LoginForm handleLogin={handleLogin}
-                 handleUsernameChange={handleUsernameChange}
-                 handlePasswordChange={handlePasswordChange}
-                 username={username}
-                 password={password}/>
+          <div>
+              <Toggleable buttonLabel='login'>
+                  <LoginForm handleLogin={handleLogin}/>
+              </Toggleable>
+          </div>
       )
     else
       return(

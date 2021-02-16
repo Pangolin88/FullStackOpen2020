@@ -73,10 +73,12 @@ const App = () => {
     try{
           const returnedBlog = await blogService.create(newBlog)
           console.log(returnedBlog)
-          setBlogs(blogs.concat(returnedBlog))
-              .sort( (a, b) => {
-                  return b.likes - a.likes
-                })
+          // setBlogs(blogs.concat(returnedBlog))
+          blogService.getAll().then(blogs =>
+          setBlogs(blogs.sort( (a, b) => {
+              return b.likes - a.likes
+            })
+          ))
           if (newBlog.author)
             handleStatus(`a new blog ${returnedBlog.title} by ${returnedBlog.author}`, true)
           else
@@ -121,13 +123,26 @@ const App = () => {
     }
   }
 
+  const handleRemoveBlog = async (removeBlog) => {
+      try{
+          const returnedBlog = await blogService.remove(removeBlog.id)
+          console.log(returnedBlog)
+          blogService.getAll().then(blogs =>
+          setBlogs(blogs.sort( (a, b) => {
+              return b.likes - a.likes
+            })
+          ))
+        }catch (exception) {
+    }
+  }
+
   return (
     <div>
       <Notification message={status.message} isSuccess={status.isSuccess}/>
       <h2>blogs</h2>
       {checkLogin(user)}
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleUpdateBlog={handleUpdateBlog}/>
+        <Blog key={blog.id} blog={blog} user={user} handleUpdateBlog={handleUpdateBlog} handleRemoveBlog={handleRemoveBlog}/>
       )}
     </div>
   )

@@ -18,4 +18,6 @@ const Notification = ({ message, isSuccess }) => {
     )
 }
 
+Notification.displayName = 'Notification'
+
 export default Notification

@@ -22,11 +22,13 @@ const Blog = ({ blog, user, handleUpdateBlog, handleRemoveBlog }) => {
     handleUpdateBlog(updateBlog)
     setLikes(likes + 1)
   }
+
   const removeBlog = () => {
     if (window.confirm(`Confirm remove ${blog.title}`)) {
       handleRemoveBlog(blog)
     }
   }
+
   const removeButton = () => {
     if (user.username === blog.user.username)
       return(
@@ -35,13 +37,13 @@ const Blog = ({ blog, user, handleUpdateBlog, handleRemoveBlog }) => {
   }
   if (!showDetail)
     return(
-      <div style={blogStyle}>
+      <div style={blogStyle} className='bloghide'>
         {blog.title} {blog.author} <button onClick={toggleShowBlog}>view</button>
       </div>
     )
   else
     return(
-      <div style={blogStyle}>
+      <div style={blogStyle} className='blogshow'>
         <div>{blog.title} <button onClick={toggleShowBlog}>hide</button></div>
         <div>{blog.url}</div>
         <div>likes {likes} <button onClick={updateLikes}>like</button></div>

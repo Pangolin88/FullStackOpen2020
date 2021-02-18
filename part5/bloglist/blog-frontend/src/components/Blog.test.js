@@ -4,7 +4,9 @@ import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
 describe('<Togglable />', () => {
-  const user = null
+  const user = {
+    username: 'pangolin'
+  }
 
   const blog = {
       title: 'Tinh yeu xanh la',
@@ -16,10 +18,11 @@ describe('<Togglable />', () => {
   let component
 
   const mockUpdateBlog = jest.fn()
+  const mockRemoveBlog = jest.fn()
 
   beforeEach(() => {
     component = render(
-      <Blog blog={blog} user={user} handleUpdateBlog={mockUpdateBlog}/>
+      <Blog blog={blog} user={user} handleUpdateBlog={mockUpdateBlog} handleRemoveBlog={mockRemoveBlog}/>
     )
   })
 

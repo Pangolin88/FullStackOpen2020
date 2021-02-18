@@ -21,7 +21,6 @@ const BlogForm = ({ handleNewBlog }) => {
 
   const addBlog = async (event) => {
     event.preventDefault()
-    console.log(title, author, url)
     const newBlog = {
       title: title,
       author: author,
@@ -41,6 +40,7 @@ const BlogForm = ({ handleNewBlog }) => {
         <div>
             title:
           <input
+            id='title'
             type='text'
             value={title}
             name='Title'
@@ -49,6 +49,7 @@ const BlogForm = ({ handleNewBlog }) => {
         <div>
             author:
           <input
+            id='author'
             type='text'
             value={author}
             name='Author'
@@ -57,6 +58,7 @@ const BlogForm = ({ handleNewBlog }) => {
         <div>
              url
           <input
+            id='url'
             type='text'
             value={url}
             name='URL'

@@ -46,7 +46,7 @@ const Blog = ({ blog, user, handleUpdateBlog, handleRemoveBlog }) => {
       <div style={blogStyle} className='blogshow'>
         <div>{blog.title} <button onClick={toggleShowBlog}>hide</button></div>
         <div>{blog.url}</div>
-        <div>likes {likes} <button onClick={updateLikes}>like</button></div>
+        <div className='likes'>likes {likes} <button id='like-button' onClick={updateLikes}>like</button></div>
         <div>{blog.author}</div>
         <div>{user !== null && removeButton()}</div>
       </div>

@@ -7,7 +7,13 @@ describe('Note app',  function() {
       username: 'pangolin',
       password: 'meowmeow'
     }
+    const user2 = {
+      name: 'Nguyen Tuyet Nhi',
+      username: 'nhinhu',
+      password: 'pleupleu'
+    }
     cy.request('POST', 'http://localhost:3001/api/users/', user)
+    cy.request('POST', 'http://localhost:3001/api/users/', user2)
     cy.visit('http://localhost:3000')
   })
 
@@ -72,6 +78,7 @@ describe('Note app',  function() {
         cy.contains('Mot ngay').get('#like-button').click()
         cy.contains('Mot ngay').get('.likes').contains('likes 1')
       })
+
     })
   })
 })

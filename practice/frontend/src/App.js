@@ -102,9 +102,12 @@ const App = () => {
 
   const noteForm = () => {
     return (
-      <Togglable buttonLabel="new note" ref={noteFormRef}>
-        <NoteForm createNote={addNote} />
-      </Togglable>
+      <div>
+        <div>{user.name} logged in</div>
+        <Togglable buttonLabel="create new note" ref={noteFormRef}>
+          <NoteForm createNote={addNote} />
+        </Togglable>
+      </div>
     )
   }
 

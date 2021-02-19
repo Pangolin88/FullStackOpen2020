@@ -78,7 +78,17 @@ describe('Note app',  function() {
         cy.contains('Mot ngay').get('#like-button').click()
         cy.contains('Mot ngay').get('.likes').contains('likes 1')
       })
-
+      it('A blog can be delete by the user who create the blog', function() {
+        cy.contains('Nang tho').contains('view').click()
+        cy.contains('Nang tho').get('#delete-button').click()
+        cy.get('html').should('not.contain', 'Nang tho Hoang Dung')
+      })
+      it.only('A blog can be delete by the user who not create the blog', function() {
+        cy.contains('logout').click()
+        cy.login({username: 'nhinhu', password: 'pleupleu'})
+        cy.contains('Nang tho').contains('view').click()
+        cy.contains('Nang tho').should('not.contain', 'Remove')
+      })
     })
   })
 })

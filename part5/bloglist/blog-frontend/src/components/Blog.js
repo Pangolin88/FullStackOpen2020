@@ -32,7 +32,7 @@ const Blog = ({ blog, user, handleUpdateBlog, handleRemoveBlog }) => {
   const removeButton = () => {
     if (user.username === blog.user.username)
       return(
-        <button onClick={removeBlog}>Remove</button>
+        <button id='delete-button' onClick={removeBlog}>Remove</button>
       )
   }
   if (!showDetail)

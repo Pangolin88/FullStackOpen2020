@@ -1,6 +1,7 @@
 describe('Note app',  function() {
 
   beforeEach(function() {
+    localStorage.removeItem('loggedBlogappUser')
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
     const user = {
       name: 'Huynh Vi Ha',
@@ -40,7 +41,7 @@ describe('Note app',  function() {
     })
   })
 
-  describe.only('When logged in', function() {
+  describe('When logged in', function() {
     beforeEach(function() {
       cy.login({username: 'pangolin', password: 'meowmeow'})
     })
@@ -59,7 +60,7 @@ describe('Note app',  function() {
       cy.contains('view')
     })
 
-    describe.only('some blogs are added', function() {
+    describe('some blogs are added', function() {
       beforeEach(function() {
         cy.createBlog({
           title: 'Nang tho',
@@ -71,6 +72,12 @@ describe('Note app',  function() {
           author: 'Kien Trinh',
           url: 'https://www.youtube.com/watch?v=3HD8Zws8pSs'
         })
+        cy.createBlog({
+          title: 'Thien ha truoc hien nha',
+          author: 'Datmaniac',
+          url: 'https://www.youtube.com/watch?v=jn8NhISy9rg'
+        })
+
       })
 
       it('A blog can be created', function() {
@@ -78,16 +85,27 @@ describe('Note app',  function() {
         cy.contains('Mot ngay').get('#like-button').click()
         cy.contains('Mot ngay').get('.likes').contains('likes 1')
       })
+
       it('A blog can be delete by the user who create the blog', function() {
         cy.contains('Nang tho').contains('view').click()
         cy.contains('Nang tho').get('#delete-button').click()
-        cy.get('html').should('not.contain', 'Nang tho Hoang Dung')
+        // cy.get('html').should('not.contain', 'Nang tho Hoang Dung')
       })
-      it.only('A blog can be delete by the user who not create the blog', function() {
+
+      it('A blog can be delete by the user who not create the blog', function() {
         cy.contains('logout').click()
         cy.login({username: 'nhinhu', password: 'pleupleu'})
         cy.contains('Nang tho').contains('view').click()
         cy.contains('Nang tho').should('not.contain', 'Remove')
+      })
+
+      it('Check the order of blogs', function() {
+        cy.contains('Thien ha truoc hien nha').contains('view').click()
+        cy.contains('Thien ha truoc hien nha').get('#like-button').click()
+        cy.contains('Thien ha truoc hien nha').contains('hide').click()
+        cy.get('.bloghide').then(buttons =>
+          cy.contains('Thien ha truoc hien nha')
+        )
       })
     })
   })

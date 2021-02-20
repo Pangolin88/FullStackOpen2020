@@ -19,14 +19,13 @@ const BlogForm = ({ handleNewBlog }) => {
     setUrl(event.target.value)
   }
 
-  const addBlog = async (event) => {
+  const addBlog = (event) => {
     event.preventDefault()
     const newBlog = {
       title: title,
       author: author,
       url: url
     }
-
     handleNewBlog(newBlog)
     setTitle('')
     setAuthor('')

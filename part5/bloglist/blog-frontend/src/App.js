@@ -18,10 +18,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs.sort( (a, b) => {
-        return b.likes - a.likes
-      })
-      )
+      setBlogs(blogs)
     )
   }, [])
 
@@ -73,13 +70,7 @@ const App = () => {
     try{
       const returnedBlog = await blogService.create(newBlog)
       console.log(returnedBlog)
-      // setBlogs(blogs.concat(returnedBlog))
-      blogService.getAll().then(blogs =>
-        setBlogs(blogs.sort( (a, b) => {
-          return b.likes - a.likes
-        })
-        )
-      )
+      setBlogs(blogs.concat(returnedBlog))
       if (newBlog.author)
         handleStatus(`a new blog ${returnedBlog.title} by ${returnedBlog.author}`, true)
       else
@@ -115,11 +106,9 @@ const App = () => {
     try{
       const returnedBlog = await blogService.update(updateBlog.id, updateBlog)
       console.log(returnedBlog)
-      blogService.getAll().then(blogs =>
-        setBlogs(blogs.sort( (a, b) => {
-          return b.likes - a.likes
-        }))
-      )
+      const updateBlogs = blogs.map(blog => blog.id === returnedBlog.id ? updateBlog : blog)
+      setBlogs(updateBlogs)
+
     }catch (exception) {
       console.log(exception)
     }
@@ -129,22 +118,20 @@ const App = () => {
     try{
       const returnedBlog = await blogService.remove(removeBlog.id)
       console.log(returnedBlog)
-      blogService.getAll().then(blogs =>
-        setBlogs(blogs.sort( (a, b) => {
-          return b.likes - a.likes
-        })
-        ))
+      blogService.getAll()
     }catch (exception) {
       console.log(exception)
     }
   }
 
   return (
-    <div>
+    <div id='body'>
       <Notification message={status.message} isSuccess={status.isSuccess}/>
       <h2>blogs</h2>
       {checkLogin(user)}
-      {blogs.map(blog =>
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map(blog =>
         <Blog key={blog.id} blog={blog} user={user} handleUpdateBlog={handleUpdateBlog} handleRemoveBlog={handleRemoveBlog}/>
       )}
     </div>

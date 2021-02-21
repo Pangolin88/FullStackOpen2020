@@ -41,7 +41,7 @@ blogsRouter.delete('/:id', async (request, response) => {
         const user = await User.findById(deletedBlog.user.toString())
         if (user.blogs)
             user.blogs = user.blogs.remove(deletedBlog._id)
-        user.save()
+        await user.save()
     }
     response.status(204).end()
 })

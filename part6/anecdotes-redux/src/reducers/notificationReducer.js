@@ -1,15 +1,15 @@
 const notificationReducer = (start = '', action) => {
   switch (action.type) {
-    case 'CHANGE':
+    case 'SET':
       return action.data
     default:
       return start
   }
 }
 
-export const changeNotification = (content) => {
+export const setNotification = (content) => {
   return {
-    type: 'CHANGE',
+    type: 'SET',
     data: content
   }
 }

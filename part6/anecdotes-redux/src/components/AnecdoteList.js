@@ -21,8 +21,7 @@ const AnecdoteList = () => {
   const dispatch = useDispatch()
   const handleClick = (anecdote) => {
     dispatch(updateVote(anecdote.id))
-    dispatch(setNotification(`you voted '${anecdote.content}'`))
-    setTimeout(() => dispatch(setNotification('')), 5000)
+    dispatch(setNotification(`you voted '${anecdote.content}'`, 5))
   }
   const anecdotes = useSelector(state => state.anecdotes
     .filter(anecdote => anecdote.content.toLowerCase().includes(state.filter.toLowerCase()))

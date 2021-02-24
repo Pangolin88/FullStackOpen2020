@@ -11,7 +11,7 @@ const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     anecdoteService.getAll().then(anecdotes => dispatch(initialAnecdotes(anecdotes)))
-  }, [])
+  }, [dispatch])
 
   return(
     <div>

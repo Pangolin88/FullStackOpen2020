@@ -17,9 +17,7 @@ const Home = () => (
   </div>
 )
 
-const Note = ({ notes }) => {
-  const id = useParams().id
-  const note = notes.find(n => n.id === Number(id))
+const Note = ({ note }) => {
   return (
     <div>
       <h2>{note.content}</h2>
@@ -168,7 +166,7 @@ const App = () => {
 
       <Switch>
         <Route path="/notes/:id">
-          <Note notes={note} />
+          <Note note={note} />
         </Route>
         <Route path="/notes">
           <Notes notes={notes} />

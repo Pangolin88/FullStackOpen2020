@@ -9,7 +9,7 @@ import LogoutButton from './components/LogoutButton'
 import Toggleable from './components/Toggleable'
 import { setNotification  } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from "react-redux";
-import { setInitialBlogs } from "./reducers/blogReducer";
+import { setInitialBlogs, createNewBlog, deleteBlog, updateBlog } from "./reducers/blogReducer";
 
 const App = () => {
   const dispatch = useDispatch()
@@ -54,13 +54,11 @@ const App = () => {
 
   const handleNewBlog = async (newBlog) => {
     try{
-      const returnedBlog = await blogService.create(newBlog)
-      const updatedBlogs = await blogService.getAll()
-      // setBlogs(updatedBlogs)
+      dispatch(createNewBlog(newBlog))
       if (newBlog.author)
-        dispatch(setNotification (`a new blog ${returnedBlog.title} by ${returnedBlog.author}`, true, 5))
+        dispatch(setNotification (`a new blog ${newBlog.title} by ${newBlog.author}`, true, 5))
       else
-       dispatch(setNotification (`a new blog ${returnedBlog.title}`, true, 5))
+       dispatch(setNotification (`a new blog ${newBlog.title}`, true, 5))
       blogFormRef.current.toggleVisibility()
     }catch (exception) {
       if (!newBlog.title || !newBlog.url)
@@ -89,13 +87,9 @@ const App = () => {
       )
   }
 
-  const handleUpdateBlog = async (updateBlog) => {
+  const handleUpdateBlog = async (blogToUpdate) => {
     try{
-      const returnedBlog = await blogService.update(updateBlog.id, updateBlog)
-      console.log(returnedBlog)
-      const updateBlogs = blogs.map(blog => blog.id === returnedBlog.id ? updateBlog : blog)
-      // setBlogs(updateBlogs)
-
+      dispatch(updateBlog(blogToUpdate.id, blogToUpdate))
     }catch (exception) {
       console.log(exception)
     }
@@ -103,10 +97,7 @@ const App = () => {
 
   const handleRemoveBlog = async (removeBlog) => {
     try{
-      const returnedBlog = await blogService.remove(removeBlog.id)
-      console.log(returnedBlog)
-      const updateBlogs = blogs.filter(blog => blog.id !== removeBlog.id)
-      // setBlogs(updateBlogs)
+      dispatch(deleteBlog(removeBlog))
     }catch (exception) {
       console.log(exception)
     }

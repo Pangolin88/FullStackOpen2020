@@ -7,11 +7,13 @@ import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import LogoutButton from './components/LogoutButton'
 import Toggleable from './components/Toggleable'
+import { setNotification  } from './reducers/notificationReducer'
+import { useDispatch } from "react-redux";
 
 const App = () => {
+  const dispatch = useDispatch()
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [status, setStatus] = useState({ message: null, isSuccess: false })
 
   const blogFormRef = useRef()
 
@@ -30,19 +32,6 @@ const App = () => {
     }
   }, [])
 
-  const handleStatus = (message, isSuccess) => {
-    setStatus({
-      message: message,
-      isSuccess: isSuccess
-    })
-    setTimeout(() => {
-      setStatus({
-        message: null,
-        isSuccess: false
-      })
-    }, 5000)
-  }
-
   const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({
@@ -53,16 +42,16 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
-      handleStatus('login successfully', true)
+      dispatch(setNotification ('login successfully', true, 5))
     } catch (exception) {
-      handleStatus('invalid username or password', false)
+      dispatch(setNotification ('invalid username or password', false, 5))
     }
   }
 
   const handleLogout =  () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
-    handleStatus('logout successfully', true)
+    dispatch(setNotification ('logout successfully', true, 5))
   }
 
   const handleNewBlog = async (newBlog) => {
@@ -71,15 +60,16 @@ const App = () => {
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs)
       if (newBlog.author)
-        handleStatus(`a new blog ${returnedBlog.title} by ${returnedBlog.author}`, true)
+        dispatch(setNotification (`a new blog ${returnedBlog.title} by ${returnedBlog.author}`, true, 5))
       else
-        handleStatus(`a new blog ${returnedBlog.title}`, true)
+       dispatch(setNotification (`a new blog ${returnedBlog.title}`, true, 5))
       blogFormRef.current.toggleVisibility()
     }catch (exception) {
       if (!newBlog.title || !newBlog.url)
-        handleStatus('missing title or url', false)
+        dispatch(setNotification ('missing title or url', false, 5))
     }
   }
+
 
   const checkLogin = (user) => {
     if (user === null)
@@ -126,7 +116,7 @@ const App = () => {
 
   return (
     <div id='body'>
-      <Notification message={status.message} isSuccess={status.isSuccess}/>
+      <Notification />
       <h2>blogs</h2>
       {checkLogin(user)}
       {blogs

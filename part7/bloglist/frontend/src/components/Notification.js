@@ -1,6 +1,12 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
-const Notification = ({ message, isSuccess }) => {
+const Notification = () => {
+  const message = useSelector(state => state.notification.message)
+  const isSuccess = useSelector(state => state.notification.isSuccess)
+
+  const state = useSelector(state => state)
+  console.log(state)
   if (message === null) {
     return null
   }

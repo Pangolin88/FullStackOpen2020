@@ -5,8 +5,6 @@ const Notification = () => {
   const message = useSelector(state => state.notification.message)
   const isSuccess = useSelector(state => state.notification.isSuccess)
 
-  const state = useSelector(state => state)
-  console.log(state)
   if (message === null) {
     return null
   }

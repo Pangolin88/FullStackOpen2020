@@ -8,20 +8,18 @@ import BlogForm from './components/BlogForm'
 import LogoutButton from './components/LogoutButton'
 import Toggleable from './components/Toggleable'
 import { setNotification  } from './reducers/notificationReducer'
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setInitialBlogs } from "./reducers/blogReducer";
 
 const App = () => {
   const dispatch = useDispatch()
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
-
-  const blogFormRef = useRef()
-
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
-  }, [])
+    dispatch(setInitialBlogs())
+  }, [dispatch])
+
+  const blogs = useSelector(state => state.blogs)
+  const [user, setUser] = useState(null)
+  const blogFormRef = useRef()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -58,7 +56,7 @@ const App = () => {
     try{
       const returnedBlog = await blogService.create(newBlog)
       const updatedBlogs = await blogService.getAll()
-      setBlogs(updatedBlogs)
+      // setBlogs(updatedBlogs)
       if (newBlog.author)
         dispatch(setNotification (`a new blog ${returnedBlog.title} by ${returnedBlog.author}`, true, 5))
       else
@@ -96,7 +94,7 @@ const App = () => {
       const returnedBlog = await blogService.update(updateBlog.id, updateBlog)
       console.log(returnedBlog)
       const updateBlogs = blogs.map(blog => blog.id === returnedBlog.id ? updateBlog : blog)
-      setBlogs(updateBlogs)
+      // setBlogs(updateBlogs)
 
     }catch (exception) {
       console.log(exception)
@@ -108,7 +106,7 @@ const App = () => {
       const returnedBlog = await blogService.remove(removeBlog.id)
       console.log(returnedBlog)
       const updateBlogs = blogs.filter(blog => blog.id !== removeBlog.id)
-      setBlogs(updateBlogs)
+      // setBlogs(updateBlogs)
     }catch (exception) {
       console.log(exception)
     }

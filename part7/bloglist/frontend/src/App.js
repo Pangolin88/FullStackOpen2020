@@ -8,9 +8,10 @@ import { setNotification  } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from "react-redux";
 import { setInitialBlogs, createNewBlog } from "./reducers/blogReducer";
 import { login, logout, initialUser } from "./reducers/loginReducer";
-import { BrowserRouter as Router, Switch, Link, Route} from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Link, Route } from 'react-router-dom'
 import Home from "./components/Home";
 import AllUsers from './components/AllUsers'
+import User from './components/User'
 import {setIntitialUsers} from "./reducers/userReducer";
 
 const App = () => {
@@ -84,13 +85,16 @@ const App = () => {
     <Router>
       <div>
         <Link stype={padding} to="/">home</Link>
-        <Link stype={padding} to="/user">users</Link>
+        <Link stype={padding} to="/users">users</Link>
       </div>
        <Notification />
        <h2>blogs</h2>
       {checkLogin(user)}
       <Switch>
-        <Route path="/user">
+        <Route path="/users/:id">
+          <User/>
+        </Route>
+        <Route path="/users">
           <AllUsers />
         </Route>
         <Route path="/">

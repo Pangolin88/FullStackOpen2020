@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import loginService from './services/login'
-import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
@@ -10,6 +8,7 @@ import Toggleable from './components/Toggleable'
 import { setNotification  } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from "react-redux";
 import { setInitialBlogs, createNewBlog, deleteBlog, updateBlog } from "./reducers/blogReducer";
+import { login, logout, initialUser } from "./reducers/loginReducer";
 
 const App = () => {
   const dispatch = useDispatch()
@@ -18,28 +17,16 @@ const App = () => {
   }, [dispatch])
 
   const blogs = useSelector(state => state.blogs)
-  const [user, setUser] = useState(null)
+  const user = useSelector(state => state.user)
   const blogFormRef = useRef()
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
+    dispatch(initialUser())
+  }, [dispatch])
 
   const handleLogin = async (username, password) => {
     try {
-      const user = await loginService.login({
-        username, password
-      })
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
-      blogService.setToken(user.token)
-      setUser(user)
+      dispatch(login(username, password))
       dispatch(setNotification ('login successfully', true, 5))
     } catch (exception) {
       dispatch(setNotification ('invalid username or password', false, 5))
@@ -47,8 +34,7 @@ const App = () => {
   }
 
   const handleLogout =  () => {
-    window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
+    dispatch(logout())
     dispatch(setNotification ('logout successfully', true, 5))
   }
 
@@ -97,7 +83,7 @@ const App = () => {
 
   const handleRemoveBlog = async (removeBlog) => {
     try{
-      dispatch(deleteBlog(removeBlog))
+      dispatch(deleteBlog(removeBlog.id))
     }catch (exception) {
       console.log(exception)
     }

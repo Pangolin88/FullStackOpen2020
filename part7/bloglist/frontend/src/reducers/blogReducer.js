@@ -25,12 +25,13 @@ export const setInitialBlogs = () => {
   }
 }
 
-export const createNewBlog = (newBlog) => {
+export const createNewBlog = (newBlog, user) => {
   return async dispatch => {
     const returnedBlog = await blogService.create(newBlog)
+    const blog = {...returnedBlog, user: user}
     dispatch({
       type: 'CREATE',
-      data: returnedBlog
+      data: blog
     })
   }
 }

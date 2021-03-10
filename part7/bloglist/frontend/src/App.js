@@ -26,21 +26,21 @@ const App = () => {
 
   const handleLogin = async (username, password) => {
     try {
-      dispatch(login(username, password))
+      await dispatch(login(username, password))
       dispatch(setNotification ('login successfully', true, 5))
     } catch (exception) {
       dispatch(setNotification ('invalid username or password', false, 5))
     }
   }
 
-  const handleLogout =  () => {
-    dispatch(logout())
+  const handleLogout = async () => {
+    await dispatch(logout())
     dispatch(setNotification ('logout successfully', true, 5))
   }
 
   const handleNewBlog = async (newBlog) => {
     try{
-      dispatch(createNewBlog(newBlog))
+      await dispatch(createNewBlog(newBlog, user))
       if (newBlog.author)
         dispatch(setNotification (`a new blog ${newBlog.title} by ${newBlog.author}`, true, 5))
       else
@@ -75,7 +75,7 @@ const App = () => {
 
   const handleUpdateBlog = async (blogToUpdate) => {
     try{
-      dispatch(updateBlog(blogToUpdate.id, blogToUpdate))
+      await dispatch(updateBlog(blogToUpdate.id, blogToUpdate))
     }catch (exception) {
       console.log(exception)
     }
@@ -83,7 +83,8 @@ const App = () => {
 
   const handleRemoveBlog = async (removeBlog) => {
     try{
-      dispatch(deleteBlog(removeBlog.id))
+      await dispatch(deleteBlog(removeBlog.id))
+      dispatch(setNotification (`deleted a blog`, true, 5))
     }catch (exception) {
       console.log(exception)
     }

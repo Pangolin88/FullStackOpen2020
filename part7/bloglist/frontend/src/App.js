@@ -1,22 +1,25 @@
 import React, { useEffect, useRef } from 'react'
-import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
-import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import LogoutButton from './components/LogoutButton'
 import Toggleable from './components/Toggleable'
+import Notification from './components/Notification'
 import { setNotification  } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from "react-redux";
-import { setInitialBlogs, createNewBlog, deleteBlog, updateBlog } from "./reducers/blogReducer";
+import { setInitialBlogs, createNewBlog } from "./reducers/blogReducer";
 import { login, logout, initialUser } from "./reducers/loginReducer";
+import { BrowserRouter as Router, Switch, Link, Route} from 'react-router-dom'
+import Home from "./components/Home";
+import AllUsers from './components/AllUsers'
+import {setIntitialUsers} from "./reducers/userReducer";
 
 const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(setInitialBlogs())
+    dispatch(setIntitialUsers())
   }, [dispatch])
 
-  const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
   const blogFormRef = useRef()
 
@@ -73,34 +76,28 @@ const App = () => {
       )
   }
 
-  const handleUpdateBlog = async (blogToUpdate) => {
-    try{
-      await dispatch(updateBlog(blogToUpdate.id, blogToUpdate))
-    }catch (exception) {
-      console.log(exception)
-    }
-  }
-
-  const handleRemoveBlog = async (removeBlog) => {
-    try{
-      await dispatch(deleteBlog(removeBlog.id))
-      dispatch(setNotification (`deleted a blog`, true, 5))
-    }catch (exception) {
-      console.log(exception)
-    }
+  const padding = {
+    padding: 5
   }
 
   return (
-    <div id='body'>
-      <Notification />
-      <h2>blogs</h2>
+    <Router>
+      <div>
+        <Link stype={padding} to="/">home</Link>
+        <Link stype={padding} to="/user">users</Link>
+      </div>
+       <Notification />
+       <h2>blogs</h2>
       {checkLogin(user)}
-      {blogs
-        .sort((a, b) => b.likes - a.likes)
-        .map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} handleUpdateBlog={handleUpdateBlog} handleRemoveBlog={handleRemoveBlog}/>
-      )}
-    </div>
+      <Switch>
+        <Route path="/user">
+          <AllUsers />
+        </Route>
+        <Route path="/">
+          <Home/>
+        </Route>
+      </Switch>
+    </Router>
   )
 }
 

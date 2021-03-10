@@ -1,7 +1,29 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { deleteBlog, updateBlog } from "../reducers/blogReducer";
+import { setNotification } from "../reducers/notificationReducer";
+import { useDispatch } from "react-redux";
 
-const Blog = ({ blog, user, handleUpdateBlog, handleRemoveBlog }) => {
+
+const Blog = ({ blog, user }) => {
+  const dispatch = useDispatch()
+  const handleUpdateBlog = async (blogToUpdate) => {
+    try{
+      await dispatch(updateBlog(blogToUpdate.id, blogToUpdate))
+    }catch (exception) {
+      console.log(exception)
+    }
+  }
+
+  const handleRemoveBlog = async (removeBlog) => {
+    try{
+      await dispatch(deleteBlog(removeBlog.id))
+      dispatch(setNotification (`deleted a blog`, true, 5))
+    }catch (exception) {
+      console.log(exception)
+    }
+  }
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,

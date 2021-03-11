@@ -4,29 +4,41 @@ import BlogForm from './components/BlogForm'
 import LogoutButton from './components/LogoutButton'
 import Toggleable from './components/Toggleable'
 import Notification from './components/Notification'
-import { setNotification  } from './reducers/notificationReducer'
-import { useDispatch, useSelector } from "react-redux";
-import { setInitialBlogs, createNewBlog } from "./reducers/blogReducer";
-import { login, logout, initialUser } from "./reducers/loginReducer";
-import { BrowserRouter as Router, Switch, Link, Route } from 'react-router-dom'
 import Home from "./components/Home";
 import AllUsers from './components/AllUsers'
 import User from './components/User'
-import {setIntitialUsers} from "./reducers/userReducer";
+
+import { initialUsers } from "./reducers/userReducer";
+import { setNotification  } from './reducers/notificationReducer'
+import { useDispatch, useSelector } from "react-redux";
+import { initialBlogs, createNewBlog } from "./reducers/blogReducer";
+import { login, logout, initialUser } from "./reducers/loginReducer";
+import { BrowserRouter as Router, Switch, Link, Route } from 'react-router-dom'
 
 const App = () => {
   const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(setInitialBlogs())
-    dispatch(setIntitialUsers())
+
+  useEffect( () => {
+    dispatch(initialUsers())
   }, [dispatch])
 
-  const user = useSelector(state => state.user)
-  const blogFormRef = useRef()
+  useEffect( () => {
+    dispatch(initialBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     dispatch(initialUser())
   }, [dispatch])
+
+  const state = useSelector(state => state)
+  console.log('state: ', state)
+
+  const user = useSelector(state => state.user)
+  const blogFormRef = useRef()
+
+  // useEffect(() => {
+  //
+  // }, [dispatch])
 
   const handleLogin = async (username, password) => {
     try {

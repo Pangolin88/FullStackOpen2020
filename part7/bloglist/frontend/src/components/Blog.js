@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 
 
 const Blog = ({ blog, user }) => {
+  console.log('blog: ,', blog)
   const dispatch = useDispatch()
   const handleUpdateBlog = async (blogToUpdate) => {
     try{
@@ -76,9 +77,7 @@ const Blog = ({ blog, user }) => {
 }
 
 Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  handleUpdateBlog: PropTypes.func.isRequired,
-  handleRemoveBlog: PropTypes.func.isRequired
+  blog: PropTypes.object.isRequired
 }
 
 Blog.displayName = 'Blog'

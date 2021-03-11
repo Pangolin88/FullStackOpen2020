@@ -30,15 +30,9 @@ const App = () => {
     dispatch(initialUser())
   }, [dispatch])
 
-  const state = useSelector(state => state)
-  console.log('state: ', state)
-
   const user = useSelector(state => state.user)
   const blogFormRef = useRef()
 
-  // useEffect(() => {
-  //
-  // }, [dispatch])
 
   const handleLogin = async (username, password) => {
     try {

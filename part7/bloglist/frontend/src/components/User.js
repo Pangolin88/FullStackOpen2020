@@ -1,12 +1,10 @@
 import React from "react";
 import { useParams } from 'react-router-dom'
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 const User = () => {
   const id = useParams().id
-  console.log(id)
   const user = useSelector(state => state.users.find(u => u.id === id))
-  console.log(user)
   if (!user)
     return null
   if (user.blogs.length === 0){

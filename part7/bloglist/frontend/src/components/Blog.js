@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import { deleteBlog, updateBlog } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from 'react-router-dom'
 
 
-const Blog = ({ blog, user }) => {
-  console.log('blog: ,', blog)
+const Blog = ({ user }) => {
   const dispatch = useDispatch()
+  const id = useParams().id
+  const blog = useSelector(state => state.blogs.find(b => b.id === id))
+
   const handleUpdateBlog = async (blogToUpdate) => {
     try{
       await dispatch(updateBlog(blogToUpdate.id, blogToUpdate))
@@ -25,20 +27,7 @@ const Blog = ({ blog, user }) => {
     }
   }
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
-  const [showDetail, setShowDetail] = useState(false)
   const [likes, setLikes]  = useState(blog.likes)
-
-  const toggleShowBlog = () => {
-    setShowDetail(!showDetail)
-  }
   const updateLikes = () => {
     const updateBlog = blog
     updateBlog.likes = updateBlog.likes + 1
@@ -58,26 +47,16 @@ const Blog = ({ blog, user }) => {
         <button id='delete-button' onClick={removeBlog}>Remove</button>
       )
   }
-  if (!showDetail)
-    return(
-      <div style={blogStyle} className='bloghide'>
-        {blog.title} {blog.author} <button onClick={toggleShowBlog}>view</button>
-      </div>
-    )
-  else
-    return(
-      <div style={blogStyle} className='blogshow'>
-        <div>{blog.title} <button onClick={toggleShowBlog}>hide</button></div>
-        <div>{blog.url}</div>
-        <div className='likes'>likes {likes} <button id='like-button' onClick={updateLikes}>like</button></div>
-        <div>{blog.author}</div>
-        <div>{user !== null && removeButton()}</div>
-      </div>
-    )
-}
 
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired
+  return(
+    <div>
+      <h2>{blog.title}</h2>
+      <div>{blog.url}</div>
+      <div>added by {blog.author}</div>
+      <div>{blog.likes} likes <button onClick={updateLikes}>likes</button></div>
+      <div>{user !== null && removeButton()}</div>
+    </div>
+  )
 }
 
 Blog.displayName = 'Blog'

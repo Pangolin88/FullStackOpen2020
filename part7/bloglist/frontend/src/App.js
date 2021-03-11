@@ -4,35 +4,33 @@ import BlogForm from './components/BlogForm'
 import LogoutButton from './components/LogoutButton'
 import Toggleable from './components/Toggleable'
 import Notification from './components/Notification'
-import Home from "./components/Home";
+import AllBlogs from './components/AllBlogs'
 import AllUsers from './components/AllUsers'
 import User from './components/User'
+import Blog from './components/Blog'
 
-import { initialUsers } from "./reducers/userReducer";
+import { initialUsers } from './reducers/userReducer'
 import { setNotification  } from './reducers/notificationReducer'
-import { useDispatch, useSelector } from "react-redux";
-import { initialBlogs, createNewBlog } from "./reducers/blogReducer";
-import { login, logout, initialUser } from "./reducers/loginReducer";
+import { useDispatch, useSelector } from 'react-redux'
+import { initialBlogs, createNewBlog } from './reducers/blogReducer'
+import { login, logout, initialUser } from './reducers/loginReducer'
 import { BrowserRouter as Router, Switch, Link, Route } from 'react-router-dom'
 
 const App = () => {
   const dispatch = useDispatch()
 
   useEffect( () => {
+    console.log('render')
     dispatch(initialUsers())
-  }, [dispatch])
-
-  useEffect( () => {
     dispatch(initialBlogs())
-  }, [dispatch])
-
-  useEffect(() => {
     dispatch(initialUser())
   }, [dispatch])
 
   const user = useSelector(state => state.user)
   const blogFormRef = useRef()
 
+  const state = useSelector(state => state)
+  console.log('state: ', state)
 
   const handleLogin = async (username, password) => {
     try {
@@ -62,7 +60,6 @@ const App = () => {
     }
   }
 
-
   const checkLogin = (user) => {
     if (user === null)
       return(
@@ -90,21 +87,27 @@ const App = () => {
   return (
     <Router>
       <div>
-        <Link stype={padding} to="/">home</Link>
-        <Link stype={padding} to="/users">users</Link>
+        <Link stype={padding} to='/blogs'>blogs</Link>
+        <Link stype={padding} to='/users'>users</Link>
       </div>
        <Notification />
        <h2>blogs</h2>
       {checkLogin(user)}
       <Switch>
-        <Route path="/users/:id">
+         <Route path='/users/:id'>
           <User/>
         </Route>
-        <Route path="/users">
+        <Route path='/blogs/:id'>
+          <Blog user={user}/>
+        </Route>
+        <Route path='/blogs'>
+           <AllBlogs/>
+        </Route>
+        <Route path='/users'>
           <AllUsers />
         </Route>
-        <Route path="/">
-          <Home/>
+        <Route path='/'>
+          home
         </Route>
       </Switch>
     </Router>

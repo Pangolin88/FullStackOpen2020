@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 
 const User = ({ user }) => {
-  let len = 0
+  let len
   if (!user.blogs){
     len = 0
   }
@@ -12,7 +12,7 @@ const User = ({ user }) => {
     len = user.blogs.length
   }
   return(
-    <tr>
+    <tr key={user.id}>
       <td><Link to={`users/${user.id}`}>{user.username}</Link></td>
       <td>{len}</td>
     </tr>

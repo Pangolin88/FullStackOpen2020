@@ -1,9 +1,9 @@
 import React from 'react'
-import {deleteBlog, updateBlog} from '../reducers/blogReducer'
+import { deleteBlog, updateBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import CommentForm from "./CommentForm";
 
 const Blog = ({ user }) => {
 
@@ -13,7 +13,7 @@ const Blog = ({ user }) => {
 
   const handleUpdateBlog = async (blogToUpdate) => {
     try{
-      await dispatch(updateBlog(blogToUpdate.id, blogToUpdate))
+      await dispatch(updateBlog(blogToUpdate.id, blogToUpdate, user))
     }catch (exception) {
       console.log(exception)
     }
@@ -29,8 +29,7 @@ const Blog = ({ user }) => {
   }
 
   const updateLikes = () => {
-    const updateBlog = blog
-    updateBlog.likes = updateBlog.likes + 1
+    const updateBlog = {...blog, likes: blog.likes + 1}
     handleUpdateBlog(updateBlog)
   }
 
@@ -53,7 +52,7 @@ const Blog = ({ user }) => {
         <div>
           <h3>Comments</h3>
           <ul>
-            {comments.map(c => <li>{c}</li>)}
+            {comments.map((c, i) => <li key={i}>{c}</li>)}
           </ul>
         </div>
       )
@@ -64,10 +63,11 @@ const Blog = ({ user }) => {
   return(
     <div>
       <h2>{blog.title}</h2>
-      <Link>{blog.url}</Link>
+      <a href={blog.url}>{blog.url}</a>
       <div>added by {blog.author}</div>
       <div>{blog.likes} likes <button onClick={updateLikes}>likes</button></div>
       <div>{user !== null && removeButton()}</div>
+      <CommentForm blog={blog}/>
       {showComments(blog.comments)}
     </div>
   )

@@ -29,9 +29,6 @@ const App = () => {
   const user = useSelector(state => state.user)
   const blogFormRef = useRef()
 
-  const state = useSelector(state => state)
-  console.log('state: ', state)
-
   const handleLogin = async (username, password) => {
     try {
       await dispatch(login(username, password))

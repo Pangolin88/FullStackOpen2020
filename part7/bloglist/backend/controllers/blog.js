@@ -4,10 +4,20 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog.find({}).populate('user', {'username': 1})
+    const blogs = await Blog.find({})
+      .populate('user', {'username': 1})
     response.json(blogs)
 })
 
+
+blogsRouter.post('/:id/comment', async(request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  const lstComments = [...blog.comments, request.body.content]
+  const addedCommentBlog = blog
+  addedCommentBlog.comments = lstComments
+  await addedCommentBlog.save()
+  response.json(addedCommentBlog)
+})
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
@@ -29,7 +39,6 @@ blogsRouter.post('/', async (request, response) => {
   await user.save()
   response.status(201).json(addedBlog)
 })
-
 
 blogsRouter.delete('/:id', async (request, response) => {
     const decodedToken = jwt.verify(request.token, process.env.SECRET)

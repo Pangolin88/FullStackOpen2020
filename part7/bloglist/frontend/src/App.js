@@ -63,36 +63,44 @@ const App = () => {
   const checkLogin = (user) => {
     if (user === null)
       return(
-        <div>
-          <Toggleable buttonLabel='login'>
-            <LoginForm handleLogin={handleLogin}/>
-          </Toggleable>
-        </div>
+        <Toggleable buttonLabel='login'>
+          <LoginForm handleLogin={handleLogin}/>
+        </Toggleable>
       )
     else
       return(
-        <div>
-          <LogoutButton handleLogout={handleLogout} user={user}/>
-          <Toggleable buttonLabel='create new blog' ref={blogFormRef}>
-            <BlogForm handleNewBlog={handleNewBlog}/>
-          </Toggleable>
-        </div>
+        <LogoutButton handleLogout={handleLogout} user={user}/>
       )
   }
 
-  const padding = {
-    padding: 5
+  const checkAllowCreateNote = (user) => {
+    if (user)
+      return(
+        <Toggleable buttonLabel='create new blog' ref={blogFormRef}>
+          <BlogForm handleNewBlog={handleNewBlog}/>
+        </Toggleable>
+      )
+  }
+
+
+  const Menu = () => {
+    const padding = {
+      paddingRight: 10
+    }
+    return (
+      <div>
+        <Link style={padding} to={'/blogs'}>blogs</Link>
+        <Link style={padding} to={'/users'}>users</Link>
+        {checkLogin(user)}
+      </div>
+    )
   }
 
   return (
     <Router>
-      <div>
-        <Link stype={padding} to='/blogs'>blogs</Link>
-        <Link stype={padding} to='/users'>users</Link>
-      </div>
+       <Menu/>
        <Notification />
-       <h2>blogs</h2>
-      {checkLogin(user)}
+       <h2>Blogs App</h2>
       <Switch>
          <Route path='/users/:id'>
           <User/>
@@ -101,6 +109,7 @@ const App = () => {
           <Blog user={user}/>
         </Route>
         <Route path='/blogs'>
+          {checkAllowCreateNote(user)}
            <AllBlogs/>
         </Route>
         <Route path='/users'>

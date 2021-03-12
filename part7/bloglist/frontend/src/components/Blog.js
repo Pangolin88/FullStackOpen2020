@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
-import { deleteBlog, updateBlog } from "../reducers/blogReducer";
-import { setNotification } from "../reducers/notificationReducer";
-import { useDispatch, useSelector } from "react-redux";
+import React from 'react'
+import {deleteBlog, updateBlog} from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-
+import { Link } from 'react-router-dom'
 
 const Blog = ({ user }) => {
+
   const dispatch = useDispatch()
   const id = useParams().id
   const blog = useSelector(state => state.blogs.find(b => b.id === id))
@@ -27,12 +28,10 @@ const Blog = ({ user }) => {
     }
   }
 
-  const [likes, setLikes]  = useState(blog.likes)
   const updateLikes = () => {
     const updateBlog = blog
     updateBlog.likes = updateBlog.likes + 1
     handleUpdateBlog(updateBlog)
-    setLikes(likes + 1)
   }
 
   const removeBlog = () => {
@@ -48,13 +47,28 @@ const Blog = ({ user }) => {
       )
   }
 
+  const showComments = (comments) => {
+    if (comments.length > 0)
+      return(
+        <div>
+          <h3>Comments</h3>
+          <ul>
+            {comments.map(c => <li>{c}</li>)}
+          </ul>
+        </div>
+      )
+  }
+
+  if (!blog)
+    return null
   return(
     <div>
       <h2>{blog.title}</h2>
-      <div>{blog.url}</div>
+      <Link>{blog.url}</Link>
       <div>added by {blog.author}</div>
       <div>{blog.likes} likes <button onClick={updateLikes}>likes</button></div>
       <div>{user !== null && removeButton()}</div>
+      {showComments(blog.comments)}
     </div>
   )
 }

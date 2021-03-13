@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { Form, Button } from 'react-bootstrap'
 
 const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState('')
@@ -15,35 +16,32 @@ const LoginForm = ({ handleLogin }) => {
   const login = async (event) => {
     event.preventDefault()
     console.log('logging in with', username, password)
-    handleLogin(username, password)
+    await  handleLogin(username, password)
     setUsername('')
     setPassword('')
   }
 
   return(
-    <form onSubmit={login}>
-      <div>
-        username
-        <input
-          id='username'
-          type='text'
-          value={username}
-          name='Username'
-          onChange={handleUsernameChange}
-        />
-      </div>
-      <div>
-        password
-        <input
-          id='password'
-          type='password'
-          value={password}
-          name='Password'
-          onChange={handlePasswordChange}
-        />
-      </div>
-      <button id='login-button' type='submit'>login</button>
-    </form>
+    <div>
+      <Form onSubmit={login}>
+        <Form.Group>
+          <Form.Label>username</Form.Label>
+          <Form.Control
+            type='text'
+            name='username'
+            onChange={handleUsernameChange}
+          />
+          <Form.Label>password</Form.Label>
+          <Form.Control
+            type='password'
+            onChange={handlePasswordChange}
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          login
+        </Button>
+      </Form>
+    </div>
   )
 }
 

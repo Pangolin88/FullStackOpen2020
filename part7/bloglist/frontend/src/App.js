@@ -94,29 +94,31 @@ const App = () => {
   }
 
   return (
-    <Router>
-       <Menu/>
-       <Notification />
-       <h2>Blogs App</h2>
-      <Switch>
-         <Route path='/users/:id'>
-          <User/>
-        </Route>
-        <Route path='/blogs/:id'>
-          <Blog user={user}/>
-        </Route>
-        <Route path='/blogs'>
-          {checkAllowCreateNote(user)}
-           <AllBlogs/>
-        </Route>
-        <Route path='/users'>
-          <AllUsers />
-        </Route>
-        <Route path='/'>
-          home
-        </Route>
-      </Switch>
-    </Router>
+    <div className='container'>
+      <Router>
+         <Menu/>
+         <Notification />
+         <h2>Blogs App</h2>
+        <Switch>
+           <Route path='/users/:id'>
+            <User/>
+          </Route>
+          <Route path='/blogs/:id'>
+            <Blog user={user}/>
+          </Route>
+          <Route path='/blogs'>
+            {checkAllowCreateNote(user)}
+             <AllBlogs/>
+          </Route>
+          <Route path='/users'>
+            <AllUsers />
+          </Route>
+          <Route path='/'>
+            home
+          </Route>
+        </Switch>
+      </Router>
+    </div>
   )
 }
 

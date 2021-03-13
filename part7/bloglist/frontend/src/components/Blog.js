@@ -4,6 +4,7 @@ import { setNotification } from '../reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import CommentForm from "./CommentForm";
+import { Button } from "react-bootstrap";
 
 const Blog = ({ user }) => {
 
@@ -42,7 +43,7 @@ const Blog = ({ user }) => {
   const removeButton = () => {
     if (user.username === blog.user.username)
       return(
-        <button id='delete-button' onClick={removeBlog}>Remove</button>
+        <Button id='delete-button' onClick={removeBlog}>Remove</Button>
       )
   }
 
@@ -65,7 +66,7 @@ const Blog = ({ user }) => {
       <h2>{blog.title}</h2>
       <a href={blog.url}>{blog.url}</a>
       <div>added by {blog.author}</div>
-      <div>{blog.likes} likes <button onClick={updateLikes}>likes</button></div>
+      <div>{blog.likes} likes <Button onClick={updateLikes}>likes</Button></div>
       <div>{user !== null && removeButton()}</div>
       <CommentForm blog={blog}/>
       {showComments(blog.comments)}

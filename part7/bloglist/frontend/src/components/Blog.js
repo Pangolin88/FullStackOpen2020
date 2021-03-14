@@ -14,7 +14,7 @@ const Blog = ({ user }) => {
 
   const handleUpdateBlog = async (blogToUpdate) => {
     try{
-      await dispatch(updateBlog(blogToUpdate.id, blogToUpdate, user))
+      await dispatch(updateBlog(blogToUpdate.id, blogToUpdate))
     }catch (exception) {
       console.log(exception)
     }

@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { initialBlogs, createNewBlog } from './reducers/blogReducer'
 import { login, logout, initialUser } from './reducers/loginReducer'
 import { BrowserRouter as Router, Switch, Link, Route } from 'react-router-dom'
+import { Navbar, Nav } from "react-bootstrap";
 
 const App = () => {
   const dispatch = useDispatch()
@@ -85,11 +86,22 @@ const App = () => {
       paddingRight: 10
     }
     return (
-      <div>
-        <Link style={padding} to={'/blogs'}>blogs</Link>
-        <Link style={padding} to={'/users'}>users</Link>
-        {checkLogin(user)}
-      </div>
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="#" as="span">
+              <Link style={padding} to="/">home</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <Link style={padding} to="/blogs">blogs</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <Link style={padding} to="/users">users</Link>
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
     )
   }
 
@@ -98,9 +110,10 @@ const App = () => {
       <Router>
          <Menu/>
          <Notification />
+         {checkLogin(user)}
          <h2>Blogs App</h2>
         <Switch>
-           <Route path='/users/:id'>
+          <Route path='/users/:id'>
             <User/>
           </Route>
           <Route path='/blogs/:id'>

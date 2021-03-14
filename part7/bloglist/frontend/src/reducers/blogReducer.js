@@ -46,13 +46,12 @@ export const deleteBlog = (id) => {
   }
 }
 
-export const updateBlog = (id, blogToUpdate, user) => {
+export const updateBlog = (id, blogToUpdate) => {
   return async dispatch => {
     const returnedBlog = await blogService.update(id, blogToUpdate)
-    const blog = {...returnedBlog, user: user}
     dispatch({
       type: 'UPDATE',
-      data: blog,
+      data: returnedBlog,
       id: id
     })
   }

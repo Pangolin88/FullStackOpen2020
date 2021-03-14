@@ -14,12 +14,11 @@ import { setNotification  } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialBlogs, createNewBlog } from './reducers/blogReducer'
 import { login, logout, initialUser } from './reducers/loginReducer'
-import { BrowserRouter as Router, Switch, Link, Route, useHistory } from 'react-router-dom'
-import { Navbar, Nav, Button } from "react-bootstrap";
+import { BrowserRouter as Router, Switch, Link, Route } from 'react-router-dom'
+import { Navbar, Nav } from "react-bootstrap";
 
 const App = () => {
   const dispatch = useDispatch()
-  const history = useHistory()
 
   useEffect( () => {
     console.log('render')

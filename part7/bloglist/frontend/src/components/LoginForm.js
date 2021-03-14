@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Form, Button } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 
 const LoginForm = ({ handleLogin }) => {
+  const history = useHistory()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -19,6 +21,7 @@ const LoginForm = ({ handleLogin }) => {
     await  handleLogin(username, password)
     setUsername('')
     setPassword('')
+    history.push('/blogs')
   }
 
   return(
@@ -40,6 +43,7 @@ const LoginForm = ({ handleLogin }) => {
         <Button variant="primary" type="submit">
           login
         </Button>
+        <Button onClick={() => history.push('/blogs')}>cancel</Button>
       </Form>
     </div>
   )

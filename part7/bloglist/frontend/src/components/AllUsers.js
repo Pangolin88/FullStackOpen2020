@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom'
+import {Table} from "react-bootstrap";
 
 
 const User = ({ user }) => {
@@ -24,13 +25,17 @@ const AllUsers = () => {
   return (
     <div>
       <h2>Users</h2>
-      <table>
+      <Table striped>
+        <thead>
         <tr>
-          <td></td>
-          <td><strong>blog created</strong></td>
+          <th></th>
+          <th>blog created</th>
         </tr>
-        {users.map(u => <User user={u}/>)}
-      </table>
+        </thead>
+        <tbody>
+         {users.map(u => <User key={u.id} user={u}/>)}
+        </tbody>
+      </Table>
     </div>
   )
 }

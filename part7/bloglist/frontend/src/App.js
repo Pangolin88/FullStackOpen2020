@@ -14,11 +14,12 @@ import { setNotification  } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialBlogs, createNewBlog } from './reducers/blogReducer'
 import { login, logout, initialUser } from './reducers/loginReducer'
-import { BrowserRouter as Router, Switch, Link, Route } from 'react-router-dom'
-import { Navbar, Nav } from "react-bootstrap";
+import { BrowserRouter as Router, Switch, Link, Route, useHistory } from 'react-router-dom'
+import { Navbar, Nav, Button } from "react-bootstrap";
 
 const App = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
 
   useEffect( () => {
     console.log('render')
@@ -58,18 +59,6 @@ const App = () => {
     }
   }
 
-  const checkLogin = (user) => {
-    if (user === null)
-      return(
-        <Toggleable buttonLabel='login'>
-          <LoginForm handleLogin={handleLogin}/>
-        </Toggleable>
-      )
-    else
-      return(
-        <LogoutButton handleLogout={handleLogout} user={user}/>
-      )
-  }
 
   const checkAllowCreateNote = (user) => {
     if (user)
@@ -100,6 +89,8 @@ const App = () => {
               <Link style={padding} to="/users">users</Link>
             </Nav.Link>
           </Nav>
+          {user && <LogoutButton user={user} handleLogout={handleLogout}/>}
+          {!user && <Link to="/login" className="btn btn-primary">login</Link>}
         </Navbar.Collapse>
       </Navbar>
     )
@@ -110,9 +101,11 @@ const App = () => {
       <Router>
          <Menu/>
          <Notification />
-         {checkLogin(user)}
          <h2>Blogs App</h2>
         <Switch>
+          <Route path='/login'>
+            <LoginForm handleLogin={handleLogin}/>
+          </Route>
           <Route path='/users/:id'>
             <User/>
           </Route>

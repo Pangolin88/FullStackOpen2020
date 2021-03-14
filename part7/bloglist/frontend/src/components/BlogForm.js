@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Form, Button } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 
 const BlogForm = ({ handleNewBlog }) => {
+  const history = useHistory()
   const [title, setTitle] = useState('')
-
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
@@ -31,6 +32,7 @@ const BlogForm = ({ handleNewBlog }) => {
     setTitle('')
     setAuthor('')
     setUrl('')
+    history.push('/blogs')
   }
 
   return(
